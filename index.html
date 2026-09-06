@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#101a24" />
+    <meta name="description" content="اكتشف جمال معبد لالش في تجربة ثلاثية الأبعاد تفاعلية مستوحاة من الوادي المقدّس، بين ضوء النهار وسكينة الليل." />
+    <title>معبد لالش · الوادي المقدّس</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./scene.bundle.js"></script>
+  </head>
+  <body data-mode="night">
+    <main id="experience" aria-label="تجربة معبد لالش ثلاثية الأبعاد">
+      <div id="scene" tabindex="0" role="application" aria-label="مجسم معبد لالش. اسحب للتدوير، ومرر للتقريب. استخدم مفاتيح الأسهم للتدوير وعلامتي الجمع والطرح للتقريب."></div>
+      <div class="vignette" aria-hidden="true"></div>
+      <div id="labels" class="scene-labels" hidden></div>
+
+      <header class="masthead">
+        <a class="brand" href="./" aria-label="معبد لالش، الصفحة الرئيسية">
+          <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M7 39h32M11 38V26l12-21 12 21v12M13 26h20M23 5v33M17 26l6-21 6 21M17 28v10m12-10v10M6 44h34M23 1v3"/></svg>
+          <span><strong>لالش</strong><small>الوادي المقدّس</small></span>
+        </a>
+        <div class="header-center"><span class="live-dot"></span> رحلة في المكان والسكينة</div>
+        <button class="quiet-button info-trigger" id="info-button" aria-haspopup="dialog"><span>معلومات</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg></button>
+      </header>
+
+      <section class="scene-heading" aria-labelledby="scene-title">
+        <div class="eyebrow"><span></span> إقليم كردستان، العراق</div>
+        <h1 id="scene-title">معبد لالش</h1>
+        <p>حيث يلتقي نور الحجر بسكينة الوادي</p>
+        <div class="small-rule"></div>
+        <span class="interpretation">تصوّر ثلاثي الأبعاد مستوحى من المكان</span>
+      </section>
+
+      <div class="mode-switch" role="group" aria-label="إضاءة المشهد">
+        <button id="day-button" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4L19 5"/></svg><span>الوضع النهاري</span></button>
+        <button id="night-button" class="selected" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M20 14.2A8.7 8.7 0 0 1 9.8 4a8.7 8.7 0 1 0 10.2 10.2Z"/></svg><span>الوضع الليلي</span></button>
+      </div>
+
+      <aside class="camera-tools" aria-label="أدوات العرض">
+        <button id="zoom-in" aria-label="تقريب" title="تقريب"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg></button>
+        <button id="zoom-out" aria-label="إبعاد" title="إبعاد"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+        <span class="tool-divider"></span>
+        <button id="reset-button" aria-label="إعادة ضبط الكاميرا" title="إعادة ضبط الكاميرا"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg></button>
+        <button id="fullscreen-button" aria-label="ملء الشاشة" title="ملء الشاشة"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+      </aside>
+
+      <div class="scene-caption"><span class="caption-line"></span><span id="view-name">سكينة الوادي</span><small id="view-detail">منظور عام · لالش</small></div>
+
+      <footer class="experience-footer">
+        <div class="navigation-hint"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="6"/><path d="M12 6v4"/></svg><span class="desktop-hint">اسحب للاستكشاف <i>·</i> مرّر للتقريب</span><span class="mobile-hint">اسحب للتدوير · باعد بإصبعين للتقريب</span></div>
+        <div class="primary-controls">
+          <button id="tour-button" class="tour-button" aria-pressed="false"><svg id="tour-icon" viewBox="0 0 24 24"><path d="m9 5 10 7-10 7Z"/></svg><span id="tour-text">جولة تلقائية</span><span class="button-separator"></span><small id="tour-duration">٦٠ ث</small></button>
+          <button id="labels-button" class="labels-button" aria-label="إظهار/إخفاء التسميات" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m20 13-7 7-10-10V3h7Z"/><circle cx="7.5" cy="7.5" r="1"/></svg><span>إظهار التسميات</span></button>
+        </div>
+        <div class="compass" aria-label="اتجاه الشمال"><span>ش</span><svg id="compass-needle" viewBox="0 0 36 36"><path class="north" d="m18 5 5 13-5-2-5 2Z"/><path class="south" d="m18 31 5-13-5 2-5-2Z"/></svg></div>
+      </footer>
+      <div class="tour-progress" aria-hidden="true"><span id="tour-progress"></span></div>
+
+      <div id="loading" class="loading-screen"><span class="loading-ring"></span><strong>يُضيء الوادي…</strong><span>لحظات وتبدأ رحلتك</span></div>
+      <div id="error-message" class="error-message" role="alert" hidden><h2>تعذّر عرض المشهد</h2><p id="error-detail">يتطلب المشهد متصفحاً يدعم WebGL 2. يرجى تحديث المتصفح وتفعيل تسريع الرسوم.</p><button onclick="location.reload()">إعادة المحاولة</button></div>
+      <output id="announcement" class="sr-only" aria-live="polite"></output>
+    </main>
+
+    <dialog id="info-panel" aria-labelledby="info-title">
+      <button id="close-info" class="close-button" aria-label="إغلاق المعلومات"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></svg></button>
+      <span class="eyebrow">عن المكان</span><h2 id="info-title">لالش، وادٍ مقدّس</h2>
+      <p>معبد لالش هو أقدس موقع ديني عند الإيزيديين، ويتميز بطرازه الروحي الفريد وأبراجه المخروطية الشهيرة.</p>
+      <p>بين سفوح الجبال في شمال العراق، تتجاور القباب المضلّعة والساحات الحجرية في مشهد يسوده الهدوء.</p>
+      <div class="info-note">هذا العمل قراءة فنية مستوحاة من عمارة لالش وطبيعتها، وليس توثيقاً مساحياً أو إعادة بناء مطابقة للموقع.</div>
+      <h3>استكشف على مهل</h3><p class="help-copy">اسحب لتدور حول المعبد، ومرّر لتقترب من التفاصيل. يمكنك اختيار جولة تلقائية أو الضغط على إحدى التسميات للاقتراب من موضعها. تدعم الكاميرا مفاتيح الأسهم و + و −، ومفتاح R لإعادة ضبطها.</p>
+      <div class="panel-links"><a href="https://whc.unesco.org/en/tentativelists/6467/" target="_blank" rel="noopener noreferrer">لالش لدى اليونسكو <span>↗</span></a><button id="export-button">تنزيل المجسّم <span dir="ltr">GLB ↓</span></button></div>
+      <small id="export-status" role="status"></small>
+    </dialog>
+    <noscript><div class="error-message">يرجى تفعيل JavaScript لعرض معبد لالش.</div></noscript>
+  </body>
+</html>

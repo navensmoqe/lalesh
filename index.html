@@ -11,34 +11,37 @@
     <script defer src="./scene.bundle.js"></script>
   </head>
   <body data-mode="night">
-    <main id="experience" aria-label="تجربة معبد لالش ثلاثية الأبعاد">
-      <div id="scene" tabindex="0" role="application" aria-label="مجسم معبد لالش. اسحب للتدوير، ومرر للتقريب. استخدم مفاتيح الأسهم للتدوير وعلامتي الجمع والطرح للتقريب."></div>
+    <main id="experience" data-i18n-aria="experience" aria-label="تجربة معبد لالش ثلاثية الأبعاد">
+      <div id="scene" tabindex="0" role="application" data-i18n-aria="sceneHelp" aria-label="مجسم معبد لالش. اسحب للتدوير، ومرر للتقريب. استخدم مفاتيح الأسهم للتدوير وعلامتي الجمع والطرح للتقريب."></div>
       <div class="vignette" aria-hidden="true"></div>
       <div id="labels" class="scene-labels" hidden></div>
 
       <header class="masthead">
-        <a class="brand" href="./" aria-label="معبد لالش، الصفحة الرئيسية">
+        <a class="brand" href="./" data-i18n-aria="home" aria-label="معبد لالش، الصفحة الرئيسية">
           <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M7 39h32M11 38V26l12-21 12 21v12M13 26h20M23 5v33M17 26l6-21 6 21M17 28v10m12-10v10M6 44h34M23 1v3"/></svg>
-          <span><strong>لالش</strong><small>الوادي المقدّس</small></span>
+          <span><strong data-i18n="brand">لالش</strong><small data-i18n="sacredValley">الوادي المقدّس</small></span>
         </a>
-        <div class="header-center"><span class="live-dot"></span> رحلة في المكان والسكينة</div>
-        <button class="quiet-button info-trigger" id="info-button" aria-haspopup="dialog"><span>معلومات</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg></button>
+        <div class="header-center"><span class="live-dot"></span><span data-i18n="headerIntro">رحلة في المكان والسكينة</span></div>
+        <div class="header-actions">
+          <button class="language-button" id="language-button" lang="en" dir="ltr" data-i18n="language" data-i18n-aria="languageAction" aria-label="Switch to English">English</button>
+          <button class="quiet-button info-trigger" id="info-button" aria-haspopup="dialog"><span data-i18n="info">معلومات</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg></button>
+        </div>
       </header>
 
       <section class="scene-heading" aria-labelledby="scene-title">
-        <div class="eyebrow"><span></span> إقليم كردستان، العراق</div>
-        <h1 id="scene-title">معبد لالش</h1>
-        <p>حيث يلتقي نور الحجر بسكينة الوادي</p>
+        <div class="eyebrow"><span></span><span class="location-text" data-i18n="location">شمال العراق</span></div>
+        <h1 id="scene-title" data-i18n="temple">معبد لالش</h1>
+        <p data-i18n="tagline">حيث يلتقي نور الحجر بسكينة الوادي</p>
         <div class="small-rule"></div>
-        <span class="interpretation">تصوّر ثلاثي الأبعاد مستوحى من المكان</span>
+        <span class="interpretation" data-i18n="interpretation">تصوّر ثلاثي الأبعاد مستوحى من المكان</span>
       </section>
 
-      <div class="mode-switch" role="group" aria-label="إضاءة المشهد">
+      <div class="mode-switch" role="group" data-i18n-aria="lighting" aria-label="إضاءة المشهد">
         <button id="day-button" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4L19 5"/></svg><span>الوضع النهاري</span></button>
         <button id="night-button" class="selected" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M20 14.2A8.7 8.7 0 0 1 9.8 4a8.7 8.7 0 1 0 10.2 10.2Z"/></svg><span>الوضع الليلي</span></button>
       </div>
 
-      <aside class="camera-tools" aria-label="أدوات العرض">
+      <aside class="camera-tools" data-i18n-aria="cameraTools" aria-label="أدوات العرض">
         <button id="zoom-in" aria-label="تقريب" title="تقريب"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg></button>
         <button id="zoom-out" aria-label="إبعاد" title="إبعاد"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
         <span class="tool-divider"></span>
@@ -70,9 +73,9 @@
       <p>بين سفوح الجبال في شمال العراق، تتجاور القباب المضلّعة والساحات الحجرية في مشهد يسوده الهدوء.</p>
       <div class="info-note">هذا العمل قراءة فنية مستوحاة من عمارة لالش وطبيعتها، وليس توثيقاً مساحياً أو إعادة بناء مطابقة للموقع.</div>
       <h3>استكشف على مهل</h3><p class="help-copy">اسحب لتدور حول المعبد، ومرّر لتقترب من التفاصيل. يمكنك اختيار جولة تلقائية أو الضغط على إحدى التسميات للاقتراب من موضعها. تدعم الكاميرا مفاتيح الأسهم و + و −، ومفتاح R لإعادة ضبطها.</p>
-      <div class="panel-links"><a href="https://whc.unesco.org/en/tentativelists/6467/" target="_blank" rel="noopener noreferrer">لالش لدى اليونسكو <span>↗</span></a><button id="export-button">تنزيل المجسّم <span dir="ltr">GLB ↓</span></button></div>
+      <div class="panel-links"><a href="https://whc.unesco.org/en/tentativelists/6467/" target="_blank" rel="noopener noreferrer"><span id="unesco-text">لالش لدى اليونسكو</span><span>↗</span></a><button id="export-button"><span id="export-text">تنزيل المجسّم</span><span dir="ltr">GLB ↓</span></button></div>
       <small id="export-status" role="status"></small>
     </dialog>
-    <noscript><div class="error-message">يرجى تفعيل JavaScript لعرض معبد لالش.</div></noscript>
+    <noscript><div class="error-message">يرجى تفعيل JavaScript لعرض معبد لالش.<p lang="en" dir="ltr">Please enable JavaScript to view Lalish Temple.</p></div></noscript>
   </body>
 </html>

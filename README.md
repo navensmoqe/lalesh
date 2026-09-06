@@ -1,6 +1,6 @@
 # Lalish — الوادي المقدّس
 
-A self-contained, interactive Three.js interpretation of the Yazidi Lalish holy valley. Arabic interface, night mode on first load, warm temple lighting, daylight, a 60-second cinematic tour, orbit/zoom controls, five optional Arabic markers, an information dialog, and GLB export.
+A self-contained, interactive Three.js interpretation of the Yazidi Lalish holy valley in Northern Iraq. Arabic and English interfaces, night mode on first load, warm temple lighting, daylight, a 60-second cinematic tour, orbit/zoom controls, five optional bilingual markers, an information dialog, and GLB export. Arabic is the default. Use the language button in the header to switch to English or back to العربية; the choice is remembered on this device when browser storage is available.
 
 ## Open immediately
 
@@ -12,6 +12,7 @@ Open **index.html** in a modern browser with WebGL 2 enabled. The included `scen
 index.html                 Arabic page, controls, accessible dialog
 styles.css                 Responsive RTL interface and local font
 scene.js                   Commented Three.js source and interactions
+i18n.js                    Arabic/English copy and live language switching
 scene.bundle.js            Ready-to-run, bundled browser script
 favicon.svg                Site icon
 assets/                    Local fonts and license notices (ready copy)
@@ -44,7 +45,8 @@ Upload the contents of `out/` to any static web host. No server functions, datab
 ## Controls
 
 - Drag or swipe: orbit the temple. Wheel or pinch: zoom.
-- Arabic day/night buttons smoothly change the illumination.
+- Day/night buttons smoothly change the illumination.
+- The English / العربية button translates the interface, scene markers, information, camera hints, and status messages without resetting the camera, lighting, or active tour. English uses left-to-right layout and localized countdown numbers.
 - The automatic tour ends after 60 seconds. Dragging, resetting, or zooming stops it.
 - Enable labels, then select a marker to move to a detailed camera view.
 - Focus the scene with Tab; arrow keys rotate, `+` / `-` zoom, and `R` resets.

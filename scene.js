@@ -6,6 +6,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { initializeLanguage, t, setText, formatDuration } from './i18n.js';
 
 // A procedural architectural interpretation, not a surveyed reconstruction.
 // All geometry and textures are created locally; no remote assets are fetched.
@@ -24,7 +25,7 @@ function showError(error) {
   $('error-message').hidden = false;
 }
 
-try { initialize(); } catch (error) { showError(error); }
+try { initializeLanguage(); initialize(); } catch (error) { showError(error); }
 
 function initialize() {
   const container = $('scene');
@@ -498,7 +499,7 @@ function initialize() {
       $(`${item}-button`).setAttribute('aria-pressed', String(next === item));
     }
     if (reducedMotion) { nightAmount = modeTarget; updateLighting(); }
-    $('announcement').textContent = next === 'night' ? 'الوضع الليلي' : 'الوضع النهاري';
+    setText('announcement', next === 'night' ? 'night' : 'day');
   }
   $('day-button').addEventListener('click', () => setMode('day'));
   $('night-button').addEventListener('click', () => setMode('night'));
@@ -511,10 +512,12 @@ function initialize() {
   function setTour(active) {
     touring = active;
     $('tour-button').setAttribute('aria-pressed', String(active));
-    $('tour-text').textContent = active ? 'إيقاف الجولة' : 'جولة تلقائية';
+    setText('tour-text', active ? 'stopTour' : 'startTour');
     $('tour-icon').innerHTML = active ? '<path d="M8 5h3v14H8Zm6 0h3v14h-3Z"/>' : '<path d="m9 5 10 7-10 7Z"/>';
-    if (!active) { $('tour-progress').style.width = '0%'; $('tour-duration').textContent = '٦٠ ث'; }
+    if (!active) { $('tour-progress').style.width = '0%'; }
+    updateDuration();
   }
+  function updateDuration() { $('tour-duration').textContent = formatDuration(touring ? 60 - tourTime : 60); }
   const tourPositions = [
     new THREE.Vector3(39, 26, 49), new THREE.Vector3(-29, 19, 35), new THREE.Vector3(-30, 22, -22),
     new THREE.Vector3(28, 25, -27), new THREE.Vector3(34, 17, 15), new THREE.Vector3(9, 10, 31), new THREE.Vector3(39, 26, 49),
@@ -527,12 +530,12 @@ function initialize() {
   $('tour-button').addEventListener('click', () => {
     if (touring) { setTour(false); transition = null; return; }
     tourTime = 0; setTour(true); flyTo(tourPositions[0].toArray(), tourTargets.points[0].toArray());
-    $('announcement').textContent = 'بدأت الجولة التلقائية. اسحب المشهد أو اضغط إيقاف الجولة للتحكم بالكاميرا.';
+    setText('announcement', 'tourStarted');
   });
   function resetCamera() {
     setTour(false); const preset = innerWidth < 701 ? mobileHome : home;
     flyTo(preset.position.toArray(), preset.target.toArray());
-    $('view-name').textContent = 'سكينة الوادي'; $('view-detail').textContent = 'منظور عام · لالش';
+    setText('view-name', 'valleyStillness'); setText('view-detail', 'overview');
   }
   $('reset-button').addEventListener('click', resetCamera);
   function zoom(factor) {
@@ -559,29 +562,33 @@ function initialize() {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
       else if ($('experience').requestFullscreen) await $('experience').requestFullscreen();
-      else $('announcement').textContent = 'يمكنك استخدام عرض الشاشة الكاملة من قائمة المتصفح.';
-    } catch { $('announcement').textContent = 'يمكنك استخدام عرض الشاشة الكاملة من قائمة المتصفح.'; }
+      else setText('announcement', 'fullscreenHelp');
+    } catch { setText('announcement', 'fullscreenHelp'); }
   });
-  document.addEventListener('fullscreenchange', () => { $('fullscreen-button').setAttribute('aria-label', document.fullscreenElement ? 'الخروج من ملء الشاشة' : 'ملء الشاشة'); });
+  document.addEventListener('fullscreenchange', () => {
+    const button = $('fullscreen-button'), key = document.fullscreenElement ? 'exitFullscreen' : 'fullscreen';
+    button.dataset.i18nAria = button.dataset.i18nTitle = key;
+    button.setAttribute('aria-label', t(key)); button.title = t(key);
+  });
 
-  // Screen-space Arabic markers remain crisp at every zoom level and work with touch.
+  // Screen-space bilingual markers remain crisp at every zoom level and work with touch.
   const markerData = [
-    { text: 'المعبد الرئيسي', point: [-5.5, 6, 0.5], camera: [13, 12, 24], target: [-5, 4, -1] },
-    { text: 'المدخل', point: [-5.5, 2.5, 1], camera: [2, 6, 19], target: [-5.5, 2.6, 0] },
-    { text: 'الساحة', point: [0.5, 1.5, 12], camera: [20, 18, 32], target: [-2, 1, 7] },
-    { text: 'البرج المخروطي', point: [-6.3, 18, -5.3], camera: [14, 19, 18], target: [-6, 12, -5] },
-    { text: 'الممر الحجري', point: [4, 0.6, 31], camera: [28, 15, 52], target: [1, 2, 13] },
+    { key: 'mainTemple', point: [-5.5, 6, 0.5], camera: [13, 12, 24], target: [-5, 4, -1] },
+    { key: 'entrance', point: [-5.5, 2.5, 1], camera: [2, 6, 19], target: [-5.5, 2.6, 0] },
+    { key: 'courtyard', point: [0.5, 1.5, 12], camera: [20, 18, 32], target: [-2, 1, 7] },
+    { key: 'conicalTower', point: [-6.3, 18, -5.3], camera: [14, 19, 18], target: [-6, 12, -5] },
+    { key: 'stonePath', point: [4, 0.6, 31], camera: [28, 15, 52], target: [1, 2, 13] },
   ];
   markerData.forEach((data) => {
     data.position = new THREE.Vector3(...data.point);
-    const button = document.createElement('button'); button.className = 'scene-marker'; button.textContent = data.text;
-    button.addEventListener('click', () => { setTour(false); flyTo(data.camera, data.target); $('view-name').textContent = data.text; $('view-detail').textContent = 'تفاصيل من الوادي المقدّس'; });
+    const button = document.createElement('button'); button.className = 'scene-marker'; setText(button, data.key);
+    button.addEventListener('click', () => { setTour(false); flyTo(data.camera, data.target); setText('view-name', data.key); setText('view-detail', 'detailView'); });
     $('labels').appendChild(button); data.element = button;
   });
   $('labels-button').addEventListener('click', () => {
     labelsShown = !labelsShown; $('labels').hidden = !labelsShown;
     $('labels-button').setAttribute('aria-pressed', String(labelsShown));
-    $('labels-button').querySelector('span').textContent = labelsShown ? 'إخفاء التسميات' : 'إظهار التسميات';
+    setText($('labels-button').querySelector('span'), labelsShown ? 'hideLabels' : 'showLabels');
     if (labelsShown) updateLabels();
   });
   const projected = new THREE.Vector3();
@@ -603,7 +610,7 @@ function initialize() {
   $('close-info').addEventListener('click', () => info.close());
   info.addEventListener('click', (event) => { if (event.target === info) { const r = info.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) info.close(); } });
   $('export-button').addEventListener('click', async () => {
-    const button = $('export-button'); button.disabled = true; $('export-status').textContent = 'جارٍ إعداد المجسّم…';
+    const button = $('export-button'); button.disabled = true; setText('export-status', 'exportPreparing');
     try {
       // Export only the architectural group: standard meshes and PBR materials.
       // Sky shaders, postprocessing and HTML labels are intentionally presentation layers.
@@ -612,8 +619,8 @@ function initialize() {
       const url = URL.createObjectURL(new Blob([binary], { type: 'model/gltf-binary' }));
       const link = document.createElement('a'); link.href = url; link.download = 'lalish-temple.glb'; link.click();
       setTimeout(() => URL.revokeObjectURL(url), 60000);
-      $('export-status').textContent = 'تم إعداد المعبد والساحة بصيغة GLB.';
-    } catch (error) { console.error(error); $('export-status').textContent = 'تعذّر إعداد الملف. حاول مرة أخرى.'; }
+      setText('export-status', 'exportReady');
+    } catch (error) { console.error(error); setText('export-status', 'exportError'); }
     finally { button.disabled = false; }
   });
 
@@ -628,7 +635,9 @@ function initialize() {
   renderer.domElement.addEventListener('webglcontextlost', (event) => { event.preventDefault(); showError(new Error('WebGL context lost')); });
   renderer.domElement.addEventListener('webglcontextrestored', () => location.reload());
   let frames = 0, frameTime = 0, adapted = false;
-  const tourNames = ['سكينة الوادي', 'عمارة الحجر', 'القباب المقدّسة', 'بين الجبال', 'أروقة الساحة', 'عتبة المعبد'];
+  const tourNames = ['valleyStillness', 'stoneArchitecture', 'sacredDomes', 'mountains', 'arcades', 'threshold'];
+  document.addEventListener('languagechange', () => { updateDuration(); if (labelsShown) updateLabels(); });
+  updateDuration();
   function animate(now) {
     requestAnimationFrame(animate);
     const dt = Math.min((now - lastTime) / 1000, 0.05); lastTime = now;
@@ -643,9 +652,9 @@ function initialize() {
       tourTime += dt; const t = Math.min(tourTime / 60, 1);
       camera.position.copy(tourPath.getPoint(t)); controls.target.copy(tourTargets.getPoint(t));
       $('tour-progress').style.width = `${t * 100}%`;
-      $('tour-duration').textContent = `${new Intl.NumberFormat('ar').format(Math.ceil(60 - tourTime))} ث`;
-      $('view-name').textContent = tourNames[Math.min(5, Math.floor(t * 6))]; $('view-detail').textContent = 'جولة في الوادي المقدّس';
-      if (t === 1) { setTour(false); $('announcement').textContent = 'اكتملت الجولة. يمكنك الآن استكشاف المعبد بحرية.'; }
+      updateDuration();
+      setText('view-name', tourNames[Math.min(5, Math.floor(t * 6))]); setText('view-detail', 'tourView');
+      if (t === 1) { setTour(false); setText('announcement', 'tourCompleted'); }
     }
     controls.update();
     $('compass-needle').style.transform = `rotate(${controls.getAzimuthalAngle()}rad)`;

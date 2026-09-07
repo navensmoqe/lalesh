@@ -42,3 +42,11 @@ html[dir=ltr] .close-button{left:auto;right:14px}
   html[dir=ltr] dialog{margin:auto}
 }
 @media(max-width:400px){.info-trigger span{display:none}.header-actions{gap:13px}html[dir=ltr] .tour-button .button-separator,html[dir=ltr] .tour-button small{display:none}html[dir=ltr] .tour-button{padding:0 12px}html[dir=ltr] .labels-button{padding:0 10px}}
+
+/* Clear the viewing surface while leaving one accessible way back to the UI. */
+.interface-hidden :is(.masthead,.scene-heading,.mode-switch,.camera-tools,.scene-caption,.experience-footer,.scene-labels,.tour-progress,.vignette){display:none!important}
+.restore-interface-button{position:absolute;inset-inline-end:max(22px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid #d7c8a74d;background:#10212c85;color:#f0e7d5;z-index:5;opacity:.6;backdrop-filter:blur(12px)}
+.restore-interface-button:hover,.restore-interface-button:focus-visible{opacity:1;background:#20333ef0}
+.restore-interface-button svg{width:21px;height:21px}
+#tour-duration{font-size:19px;line-height:1}
+@media(max-width:700px){.camera-tools{top:37%}.restore-interface-button{inset-inline-end:18px;bottom:max(18px,env(safe-area-inset-bottom))}}

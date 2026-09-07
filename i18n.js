@@ -14,6 +14,8 @@ export const messages = {
     valleyStillness: 'سكينة الوادي', overview: 'منظور عام · لالش',
     desktopHint: 'اسحب للاستكشاف · مرّر للتقريب', mobileHint: 'اسحب للتدوير · باعد بإصبعين للتقريب',
     startTour: 'جولة تلقائية', stopTour: 'إيقاف الجولة', toggleLabels: 'إظهار/إخفاء التسميات', showLabels: 'إظهار التسميات', hideLabels: 'إخفاء التسميات',
+    continuousTour: 'جولة مستمرة', hideInterface: 'إخفاء جميع النصوص والعناصر', showInterface: 'إظهار الواجهة',
+    interfaceHidden: 'تم إخفاء الواجهة. اضغط زر العين أو H أو Escape لإعادتها.', interfaceShown: 'تم إظهار الواجهة.',
     northDirection: 'اتجاه الشمال', north: 'ش', loadingTitle: 'يُضيء الوادي…', loadingDetail: 'لحظات وتبدأ رحلتك',
     errorTitle: 'تعذّر عرض المشهد', errorDetail: 'يتطلب المشهد متصفحاً يدعم WebGL 2. يرجى تحديث المتصفح وتفعيل تسريع الرسوم.', retry: 'إعادة المحاولة',
     closeInfo: 'إغلاق المعلومات', about: 'عن المكان', infoTitle: 'لالش، وادٍ مقدّس',
@@ -21,14 +23,14 @@ export const messages = {
     infoLandscape: 'بين سفوح الجبال في شمال العراق، تتجاور القباب المضلّعة والساحات الحجرية في مشهد يسوده الهدوء.',
     infoNote: 'هذا العمل قراءة فنية مستوحاة من عمارة لالش وطبيعتها، وليس توثيقاً مساحياً أو إعادة بناء مطابقة للموقع.',
     explore: 'استكشف على مهل',
-    help: 'اسحب لتدور حول المعبد، ومرّر لتقترب من التفاصيل. يمكنك اختيار جولة تلقائية أو الضغط على إحدى التسميات للاقتراب من موضعها. تدعم الكاميرا مفاتيح الأسهم و + و −، ومفتاح R لإعادة ضبطها.',
+    help: 'اسحب لتدور حول المعبد، ومرّر لتقترب من التفاصيل. تستمر الجولة التلقائية حتى توقفها أو تتحكم بالكاميرا. اضغط زر العين أو H لإخفاء الواجهة وإعادتها، أو Escape لإظهارها. تدعم الكاميرا مفاتيح الأسهم و + و −، ومفتاح R لإعادة ضبطها.',
     unesco: 'لالش لدى اليونسكو', exportModel: 'تنزيل المجسّم',
     exportPreparing: 'جارٍ إعداد المجسّم…', exportReady: 'تم إعداد المعبد والساحة بصيغة GLB.', exportError: 'تعذّر إعداد الملف. حاول مرة أخرى.',
-    tourStarted: 'بدأت الجولة التلقائية. اسحب المشهد أو اضغط إيقاف الجولة للتحكم بالكاميرا.',
-    tourCompleted: 'اكتملت الجولة. يمكنك الآن استكشاف المعبد بحرية.', fullscreenHelp: 'يمكنك استخدام عرض الشاشة الكاملة من قائمة المتصفح.',
+    tourStarted: 'بدأت الجولة المستمرة. اسحب المشهد أو اضغط إيقاف الجولة للتحكم بالكاميرا.',
+    fullscreenHelp: 'يمكنك استخدام عرض الشاشة الكاملة من قائمة المتصفح.',
     mainTemple: 'المعبد الرئيسي', entrance: 'المدخل', courtyard: 'الساحة', conicalTower: 'البرج المخروطي', stonePath: 'الممر الحجري',
     detailView: 'تفاصيل من الوادي المقدّس', tourView: 'جولة في الوادي المقدّس',
-    stoneArchitecture: 'عمارة الحجر', sacredDomes: 'القباب المقدّسة', mountains: 'بين الجبال', arcades: 'أروقة الساحة', threshold: 'عتبة المعبد', seconds: 'ث',
+    stoneArchitecture: 'عمارة الحجر', sacredDomes: 'القباب المقدّسة', mountains: 'بين الجبال', arcades: 'أروقة الساحة', threshold: 'عتبة المعبد',
   },
   en: {
     pageTitle: 'Lalish Temple · The Sacred Valley',
@@ -43,6 +45,8 @@ export const messages = {
     valleyStillness: 'The valley’s stillness', overview: 'Overview · Lalish',
     desktopHint: 'Drag to explore · Scroll to zoom', mobileHint: 'Drag to orbit · Pinch to zoom',
     startTour: 'Guided tour', stopTour: 'Stop tour', toggleLabels: 'Show/hide labels', showLabels: 'Show labels', hideLabels: 'Hide labels',
+    continuousTour: 'Continuous tour', hideInterface: 'Hide all text and controls', showInterface: 'Show interface',
+    interfaceHidden: 'Interface hidden. Use the eye button, H, or Escape to restore it.', interfaceShown: 'Interface restored.',
     northDirection: 'North direction', north: 'N', loadingTitle: 'The valley awakens…', loadingDetail: 'Your journey begins in a moment',
     errorTitle: 'Unable to display the scene', errorDetail: 'This scene requires a browser with WebGL 2 support. Please update your browser and enable graphics acceleration.', retry: 'Try again',
     closeInfo: 'Close information', about: 'About the place', infoTitle: 'Lalish, a sacred valley',
@@ -50,21 +54,19 @@ export const messages = {
     infoLandscape: 'Among the mountain slopes of Northern Iraq, fluted domes and stone courtyards form a place of quiet beauty.',
     infoNote: 'This work is an artistic interpretation inspired by the architecture and landscape of Lalish, rather than a measured survey or an exact reconstruction.',
     explore: 'Explore at your own pace',
-    help: 'Drag to orbit the temple and scroll to see its details. Start a guided tour or select a scene label to move closer. You can also use the arrow keys to orbit, + and − to zoom, and R to reset the camera.',
+    help: 'Drag to orbit the temple and scroll to see its details. The guided tour loops until you stop it or take control of the camera. Use the eye button or H to hide and restore the interface, or Escape to show it. Use arrow keys to orbit, + and − to zoom, and R to reset the camera.',
     unesco: 'Lalish at UNESCO', exportModel: 'Download model',
     exportPreparing: 'Preparing the model…', exportReady: 'The temple and courtyard GLB file is ready.', exportError: 'Unable to prepare the file. Please try again.',
-    tourStarted: 'The guided tour has started. Drag the scene or select Stop tour to control the camera.',
-    tourCompleted: 'The tour is complete. You can now explore the temple freely.', fullscreenHelp: 'You can use full-screen view from your browser menu.',
+    tourStarted: 'The continuous tour has started. Drag the scene or select Stop tour to control the camera.',
+    fullscreenHelp: 'You can use full-screen view from your browser menu.',
     mainTemple: 'Main temple', entrance: 'Entrance', courtyard: 'Courtyard', conicalTower: 'Conical tower', stonePath: 'Stone pathway',
     detailView: 'Details of the sacred valley', tourView: 'A tour of the sacred valley',
-    stoneArchitecture: 'Stone architecture', sacredDomes: 'Sacred domes', mountains: 'Among the mountains', arcades: 'Courtyard arcades', threshold: 'Temple threshold', seconds: 's',
+    stoneArchitecture: 'Stone architecture', sacredDomes: 'Sacred domes', mountains: 'Among the mountains', arcades: 'Courtyard arcades', threshold: 'Temple threshold',
   },
 };
 
 let language = 'ar';
-let numberFormat = new Intl.NumberFormat(language);
 export const t = (key) => messages[language][key] ?? messages.ar[key] ?? key;
-export const formatDuration = (seconds) => `${numberFormat.format(Math.max(0, Math.ceil(seconds)))} ${t('seconds')}`;
 
 // Store each dynamic message's key so switching language also updates past status text.
 export function setText(element, key) {
@@ -75,7 +77,6 @@ export function setText(element, key) {
 
 export function setLanguage(next) {
   language = next === 'en' ? 'en' : 'ar';
-  numberFormat = new Intl.NumberFormat(language);
   document.documentElement.lang = language;
   document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
   document.title = t('pageTitle');

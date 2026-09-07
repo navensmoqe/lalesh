@@ -6,7 +6,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
-import { initializeLanguage, t, setText, formatDuration } from './i18n.js';
+import { initializeLanguage, t, setText } from './i18n.js';
 
 // A procedural architectural interpretation, not a surveyed reconstruction.
 // All geometry and textures are created locally; no remote assets are fetched.
@@ -515,18 +515,19 @@ function initialize() {
     setText('tour-text', active ? 'stopTour' : 'startTour');
     $('tour-icon').innerHTML = active ? '<path d="M8 5h3v14H8Zm6 0h3v14h-3Z"/>' : '<path d="m9 5 10 7-10 7Z"/>';
     if (!active) { $('tour-progress').style.width = '0%'; }
-    updateDuration();
   }
-  function updateDuration() { $('tour-duration').textContent = formatDuration(touring ? 60 - tourTime : 60); }
+  const tourLoopSeconds = 60;
+  // Closed curves share position and tangent at the seam for continuous motion.
+  // The closing point must not be repeated; Three.js joins the final point to the first.
   const tourPositions = [
     new THREE.Vector3(39, 26, 49), new THREE.Vector3(-29, 19, 35), new THREE.Vector3(-30, 22, -22),
-    new THREE.Vector3(28, 25, -27), new THREE.Vector3(34, 17, 15), new THREE.Vector3(9, 10, 31), new THREE.Vector3(39, 26, 49),
+    new THREE.Vector3(28, 25, -27), new THREE.Vector3(34, 17, 15), new THREE.Vector3(9, 10, 31),
   ];
-  const tourPath = new THREE.CatmullRomCurve3(tourPositions, false, 'catmullrom', 0.28);
+  const tourPath = new THREE.CatmullRomCurve3(tourPositions, true, 'catmullrom', 0.28);
   const tourTargets = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, 5, 0), new THREE.Vector3(-5, 6, -1), new THREE.Vector3(-1, 8, -7),
-    new THREE.Vector3(0, 8, -5), new THREE.Vector3(-3, 5, 1), new THREE.Vector3(-5, 4, -1), new THREE.Vector3(0, 5, 0),
-  ], false, 'catmullrom', 0.25);
+    new THREE.Vector3(0, 8, -5), new THREE.Vector3(-3, 5, 1), new THREE.Vector3(-5, 4, -1),
+  ], true, 'catmullrom', 0.25);
   $('tour-button').addEventListener('click', () => {
     if (touring) { setTour(false); transition = null; return; }
     tourTime = 0; setTour(true); flyTo(tourPositions[0].toArray(), tourTargets.points[0].toArray());
@@ -606,6 +607,26 @@ function initialize() {
 
   // Native dialog provides focus trapping, Escape dismissal, and mobile scrolling.
   const info = $('info-panel');
+  let interfaceHidden = false;
+  const interfaceLayers = document.querySelectorAll('.masthead, .scene-heading, .mode-switch, .camera-tools, .scene-caption, .experience-footer, .scene-labels, .tour-progress, .vignette');
+  function setInterfaceHidden(hidden) {
+    interfaceHidden = hidden;
+    if (hidden && info.open) info.close();
+    $('experience').classList.toggle('interface-hidden', hidden);
+    // Inert prevents keyboard focus entering controls that are hidden from view.
+    interfaceLayers.forEach((layer) => { layer.inert = hidden; });
+    $('restore-interface-button').hidden = !hidden;
+    (hidden ? $('restore-interface-button') : $('hide-interface-button')).focus({ preventScroll: true });
+    setText('announcement', hidden ? 'interfaceHidden' : 'interfaceShown');
+    if (!hidden && labelsShown) updateLabels();
+  }
+  $('hide-interface-button').addEventListener('click', () => setInterfaceHidden(true));
+  $('restore-interface-button').addEventListener('click', () => setInterfaceHidden(false));
+  document.addEventListener('keydown', (event) => {
+    if (event.repeat || event.ctrlKey || event.altKey || event.metaKey || event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+    if (event.key.toLowerCase() === 'h') { event.preventDefault(); setInterfaceHidden(!interfaceHidden); }
+    else if (event.key === 'Escape' && interfaceHidden) { event.preventDefault(); setInterfaceHidden(false); }
+  });
   $('info-button').addEventListener('click', () => { setTour(false); info.showModal(); });
   $('close-info').addEventListener('click', () => info.close());
   info.addEventListener('click', (event) => { if (event.target === info) { const r = info.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) info.close(); } });
@@ -636,8 +657,7 @@ function initialize() {
   renderer.domElement.addEventListener('webglcontextrestored', () => location.reload());
   let frames = 0, frameTime = 0, adapted = false;
   const tourNames = ['valleyStillness', 'stoneArchitecture', 'sacredDomes', 'mountains', 'arcades', 'threshold'];
-  document.addEventListener('languagechange', () => { updateDuration(); if (labelsShown) updateLabels(); });
-  updateDuration();
+  document.addEventListener('languagechange', () => { if (labelsShown && !interfaceHidden) updateLabels(); });
   function animate(now) {
     requestAnimationFrame(animate);
     const dt = Math.min((now - lastTime) / 1000, 0.05); lastTime = now;
@@ -649,16 +669,15 @@ function initialize() {
       camera.position.lerpVectors(transition.from, transition.to, eased); controls.target.lerpVectors(transition.fromTarget, transition.toTarget, eased);
       if (t === 1) transition = null;
     } else if (touring) {
-      tourTime += dt; const t = Math.min(tourTime / 60, 1);
+      tourTime = (tourTime + dt) % tourLoopSeconds;
+      const t = tourTime / tourLoopSeconds;
       camera.position.copy(tourPath.getPoint(t)); controls.target.copy(tourTargets.getPoint(t));
       $('tour-progress').style.width = `${t * 100}%`;
-      updateDuration();
       setText('view-name', tourNames[Math.min(5, Math.floor(t * 6))]); setText('view-detail', 'tourView');
-      if (t === 1) { setTour(false); setText('announcement', 'tourCompleted'); }
     }
     controls.update();
     $('compass-needle').style.transform = `rotate(${controls.getAzimuthalAngle()}rad)`;
-    labelClock += dt; if (labelsShown && labelClock > 0.06) { updateLabels(); labelClock = 0; }
+    labelClock += dt; if (labelsShown && !interfaceHidden && labelClock > 0.06) { updateLabels(); labelClock = 0; }
     if (composer) composer.render(); else renderer.render(scene, camera);
     // Adapt once after startup if sustained performance is below ~25 fps.
     if (!adapted && frames++ > 90) { frameTime += dt; if (frames > 150) { if (frameTime / 60 > 0.04) { renderer.setPixelRatio(1); if (composer) { composer.dispose(); composer = null; } resize(); } adapted = true; } }

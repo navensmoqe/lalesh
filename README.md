@@ -1,6 +1,6 @@
 # Lalish — الوادي المقدّس
 
-A self-contained, interactive Three.js interpretation of the Yazidi Lalish holy valley in Northern Iraq. Arabic and English interfaces, night mode on first load, warm temple lighting, daylight, a 60-second cinematic tour, orbit/zoom controls, five optional bilingual markers, an information dialog, and GLB export. Arabic is the default. Use the language button in the header to switch to English or back to العربية; the choice is remembered on this device when browser storage is available.
+A self-contained, interactive Three.js interpretation of the Yazidi Lalish holy valley in Northern Iraq. Arabic and English interfaces, night mode on first load, warm temple lighting, daylight, a continuously looping cinematic tour, orbit/zoom controls, five optional bilingual markers, an information dialog, and GLB export. Arabic is the default. Use the language button in the header to switch to English or back to العربية; the choice is remembered on this device when browser storage is available.
 
 ## Open immediately
 
@@ -46,8 +46,9 @@ Upload the contents of `out/` to any static web host. No server functions, datab
 
 - Drag or swipe: orbit the temple. Wheel or pinch: zoom.
 - Day/night buttons smoothly change the illumination.
-- The English / العربية button translates the interface, scene markers, information, camera hints, and status messages without resetting the camera, lighting, or active tour. English uses left-to-right layout and localized countdown numbers.
-- The automatic tour ends after 60 seconds. Dragging, resetting, or zooming stops it.
+- The English / العربية button translates the interface, scene markers, information, camera hints, and status messages without resetting the camera, lighting, or active tour. English uses left-to-right layout.
+- The automatic tour repeats a seamless 60-second loop indefinitely. Use Stop tour, or take control by dragging, resetting, or zooming, to stop it.
+- The crossed-eye button hides all interface text, markers, controls, and decorative overlays, keeping the 3D scene and a small eye button for restoring the interface. Press `H` to toggle or `Escape` to restore. Camera motion, day/night mode, and the previous labels setting are preserved when hiding or restoring the interface.
 - Enable labels, then select a marker to move to a detailed camera view.
 - Focus the scene with Tab; arrow keys rotate, `+` / `-` zoom, and `R` resets.
 - The information dialog supports Escape and keyboard focus trapping.

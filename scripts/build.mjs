@@ -19,7 +19,7 @@ if (process.argv.includes('--dev')) {
 } else {
   await build(options);
   await mkdir('out', { recursive: true });
-  for (const name of ['index.html', 'styles.css', 'scene.bundle.js']) {
+  for (const name of ['index.html', 'styles.css', 'scene.bundle.js', '.nojekyll']) {
     await copyFile(name, `out/${name}`);
   }
   await cp('public', 'out', { recursive: true });

@@ -43,6 +43,8 @@ npm run build
 
 Upload the contents of `out/` to any static web host. No server functions, database, authentication service, or environment variables are needed to run the application.
 
+For GitHub Pages, choose **Deploy from a branch → main → / (root)** in the repository's Pages settings. The included `.nojekyll` file tells GitHub to publish the prebuilt files directly without a Jekyll build. Keep this file when deploying `out/` to another GitHub Pages branch.
+
 ## Controls
 
 - Drag or swipe: orbit the temple. Wheel or pinch: zoom.

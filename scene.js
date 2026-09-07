@@ -7,6 +7,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { initializeLanguage, t, setText } from './i18n.js';
+import { createNightParticles } from './night-particles.js';
 
 // A procedural architectural interpretation, not a surveyed reconstruction.
 // All geometry and textures are created locally; no remote assets are fetched.
@@ -374,13 +375,14 @@ function initialize() {
   instances('Limestone_outcrops', new THREE.IcosahedronGeometry(1, 0), agedStone, rocks, true);
 
   // Lamps use emissive geometry + soft halo sprites. Only a few real lights are needed.
-  const warmLights = [], haloSprites = [];
+  const warmLights = [], haloSprites = [], lampEmitters = [];
   const haloCanvas = document.createElement('canvas'); haloCanvas.width = haloCanvas.height = 64;
   const hc = haloCanvas.getContext('2d'), gradient = hc.createRadialGradient(32, 32, 0, 32, 32, 32);
   gradient.addColorStop(0, 'rgba(255,212,142,.85)'); gradient.addColorStop(0.12, 'rgba(255,176,73,.36)'); gradient.addColorStop(0.45, 'rgba(248,158,57,.08)'); gradient.addColorStop(1, 'rgba(248,158,57,0)');
   hc.fillStyle = gradient; hc.fillRect(0, 0, 64, 64);
   const haloTexture = new THREE.CanvasTexture(haloCanvas);
   function lantern(x, y, z, realLight = false, scale = 1) {
+    lampEmitters.push({ x, y: y + 0.65 * scale, z });
     box(x, y, z, 0.44 * scale, 0.13 * scale, 0.44 * scale, bronze);
     box(x, y + 0.32 * scale, z, 0.25 * scale, 0.46 * scale, 0.25 * scale, glow);
     box(x, y + 0.6 * scale, z, 0.43 * scale, 0.1 * scale, 0.43 * scale, bronze);
@@ -453,6 +455,10 @@ function initialize() {
   sunlight.shadow.bias = -0.0005; sunlight.shadow.normalBias = 0.06; sunlight.shadow.radius = 3; scene.add(sunlight);
   const fill = new THREE.DirectionalLight('#829abe', 0.7); fill.position.set(35, 15, -25); scene.add(fill);
 
+  // Night-only embers and fireflies are world-space effects, independent of the UI.
+  const nightParticles = createNightParticles({ lowPower, reducedMotion, random, terrainHeight, emitters: lampEmitters, renderer });
+  scene.add(nightParticles.points);
+
   // Bloom is restrained and omitted on smaller devices; light halos still work.
   let composer = null, bloom = null;
   if (!lowPower) {
@@ -490,6 +496,7 @@ function initialize() {
     moonHalo.material.opacity = nightAmount * 0.14;
     renderer.toneMappingExposure = mix(1.03, 1.3, nightAmount);
     if (bloom) bloom.strength = mix(0.08, 0.32, nightAmount);
+    nightParticles.update(0, nightAmount, scene.fog.density);
   }
   function setMode(next) {
     modeTarget = next === 'night' ? 1 : 0;
@@ -650,6 +657,7 @@ function initialize() {
     const width = container.clientWidth, height = container.clientHeight;
     camera.aspect = width / height; camera.fov = width < 701 ? 51 : 43; camera.updateProjectionMatrix();
     renderer.setSize(width, height); if (composer) composer.setSize(width, height);
+    nightParticles.resize();
     if (labelsShown) updateLabels();
   }
   addEventListener('resize', resize);
@@ -663,6 +671,7 @@ function initialize() {
     const dt = Math.min((now - lastTime) / 1000, 0.05); lastTime = now;
     if (document.hidden) return;
     if (Math.abs(nightAmount - modeTarget) > 0.001) { nightAmount = mix(nightAmount, modeTarget, 1 - Math.exp(-dt * 2.8)); updateLighting(); }
+    nightParticles.update(dt, nightAmount, scene.fog.density);
     if (transition) {
       transition.elapsed += dt * 1000;
       const t = transition.duration === 0 ? 1 : Math.min(1, transition.elapsed / transition.duration), eased = t * t * (3 - 2 * t);

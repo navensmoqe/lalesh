@@ -9,7 +9,7 @@
     "dev": "node scripts/build.mjs --dev",
     "build": "node scripts/build.mjs",
     "start": "vite --config vite.static.config.js --host 127.0.0.1",
-    "lint": "oxlint scene.js i18n.js scripts/build.mjs vite.static.config.js",
+    "lint": "oxlint scene.js i18n.js night-particles.js scripts/build.mjs vite.static.config.js",
     "format": "oxfmt"
   },
   "dependencies": {

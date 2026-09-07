@@ -13,6 +13,7 @@ index.html                 Arabic page, controls, accessible dialog
 styles.css                 Responsive RTL interface and local font
 scene.js                   Commented Three.js source and interactions
 i18n.js                    Arabic/English copy and live language switching
+night-particles.js         GPU-animated golden embers and glowing fireflies
 scene.bundle.js            Ready-to-run, bundled browser script
 favicon.svg                Site icon
 assets/                    Local fonts and license notices (ready copy)
@@ -60,7 +61,9 @@ The model is an artistic interpretation, not a measured reconstruction. Major vo
 
 Stone maps are generated on local canvases. Static geometry is merged by material; trees and rocks are instanced. Shadows use one directional light, and warm illumination uses a small set of unshadowed lights. Desktop rendering adds restrained bloom. Smaller or low-core devices use a lower pixel ratio and omit bloom, while slow rendering triggers a further resolution reduction. Rendering pauses while the tab is hidden. WebGL failures display an Arabic recovery message.
 
-The interface respects reduced-motion preferences for view transitions. The explicitly started tour still moves the camera and can be stopped at any time.
+Night mode includes gently rising amber embers and slowly pulsing golden fireflies, scattered near lanterns, through the courtyard, alongside the temple and over the surrounding landscape. Their soft glow fades out in daylight and remains visible with the interface hidden. The entire effect uses one GPU-animated point cloud (320 particles on desktop, 140 on smaller or low-core devices), with no additional textures or lights. Depth testing keeps particles behind solid architecture, and fog softens distant glows. The effect adapts to resolution changes and works with or without bloom.
+
+The interface respects reduced-motion preferences for view transitions; night particles retain a static glow when reduced motion is enabled. The explicitly started tour still moves the camera and can be stopped at any time.
 
 ## References and licenses
 
